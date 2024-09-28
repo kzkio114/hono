@@ -15,7 +15,7 @@ services:
 
   hono-app:
     build: .
-    command: bash -c "bun run index.ts"
+    command: bash -c "bun run --hot app/src/index.ts"
     tty: true
     stdin_open: true
     volumes:

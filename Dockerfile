@@ -1,34 +1,19 @@
-# ベースイメージとしてDebianを使用
-FROM debian:bullseye-slim
+# Bunの公式イメージを使用
+FROM oven/bun:1 AS base
 
 # 環境変数の設定
 ENV LANG C.UTF-8
 ENV TZ Asia/Tokyo
 
-# 必要なパッケージのインストール
-RUN apt-get update && apt-get install -y curl bash
-
-# Bunのインストール
-RUN curl -fsSL https://bun.sh/install | bash
-
-# Bunがインストールされている場所をパスに追加
-ENV PATH="/root/.bun/bin:$PATH"
-
 # アプリケーションディレクトリの作成
 WORKDIR /app
 
-# Bunのバージョンを確認
-RUN bun --version
-
-# アプリケーションの依存関係のインストール (package.jsonとbun.lockbをコピー)
-COPY package.json bun.lockb /app/
+# アプリケーションの依存関係のインストール (app/package.jsonとbun.lockbをコピー)
+COPY ./app/package.json ./app/bun.lockb /app/
 RUN bun install
 
-# アプリケーションコードをコピー
-COPY . /app
-
-# Honoサーバーを起動するためのポートを公開
-EXPOSE 3000
+# アプリケーションコードをコピー (appディレクトリ全体をコピー)
+COPY ./app /app
 
 # サーバーの起動コマンド (Honoアプリケーション用)
-CMD ["bun", "run", "index.ts"]
+CMD ["bun", "run", "dev"]
