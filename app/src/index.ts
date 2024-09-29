@@ -1,7 +1,7 @@
 import { Hono } from 'hono'
 
 const app = new Hono()
-app.get('/', (c) => c.text('honoをbunでdevサーバーを立ててます！dockerでやってます。'))
+app.get('/', (c) => c.text('Hello, World!'))
 
 export default {
   port: 3000,
